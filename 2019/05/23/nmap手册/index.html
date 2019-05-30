@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1:nmap功能介绍  1.主机存活检测 2.端口探测3.服务识别4.操作系统识别5.硬件地址检测6.服务版本识别7.漏洞扫描,使用nmap自带脚本  2:简单示例 使用ping检测10.0.0.0/24这个网段nmap -sP 10.0.0.0/24使用SYN的方法对全端口进行扫描,在aggressive(4)的时间模板下,同时对开放的端口进行端口识别nmap -p1-65535 -sV -sS">
+<meta name="keywords" content="nmap手册">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nmap手册">
+<meta property="og:url" content="https://h1ck.com/2019/05/23/nmap手册/index.html">
+<meta property="og:site_name" content="h1ck">
+<meta property="og:description" content="1:nmap功能介绍  1.主机存活检测 2.端口探测3.服务识别4.操作系统识别5.硬件地址检测6.服务版本识别7.漏洞扫描,使用nmap自带脚本  2:简单示例 使用ping检测10.0.0.0/24这个网段nmap -sP 10.0.0.0/24使用SYN的方法对全端口进行扫描,在aggressive(4)的时间模板下,同时对开放的端口进行端口识别nmap -p1-65535 -sV -sS">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-23T08:39:02.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nmap手册">
+<meta name="twitter:description" content="1:nmap功能介绍  1.主机存活检测 2.端口探测3.服务识别4.操作系统识别5.硬件地址检测6.服务版本识别7.漏洞扫描,使用nmap自带脚本  2:简单示例 使用ping检测10.0.0.0/24这个网段nmap -sP 10.0.0.0/24使用SYN的方法对全端口进行扫描,在aggressive(4)的时间模板下,同时对开放的端口进行端口识别nmap -p1-65535 -sV -sS">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://h1ck.com/2019/05/23/nmap手册/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>nmap手册 | h1ck</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">h1ck</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://h1ck.com/2019/05/23/nmap手册/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Line">
+      <meta itemprop="description" content="世界上每一个瞬间都是奇迹">
+      <meta itemprop="image" content="/images/hackertx.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="h1ck">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nmap手册
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-23 15:09:30 / 修改时间：16:39:02" itemprop="dateCreated datePublished" datetime="2019-05-23T15:09:30+08:00">2019-05-23</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1-nmap功能介绍"><a href="#1-nmap功能介绍" class="headerlink" title="1:nmap功能介绍"></a>1:nmap功能介绍</h3><hr>
+<blockquote>
+<p>1.主机存活检测 <br><br>2.端口探测<br><br>3.服务识别<br><br>4.操作系统识别<br><br>5.硬件地址检测<br><br>6.服务版本识别<br><br>7.漏洞扫描,使用nmap自带脚本</p>
+</blockquote>
+<h3 id="2-简单示例"><a href="#2-简单示例" class="headerlink" title="2:简单示例"></a>2:简单示例</h3><hr>
+<p>使用ping检测10.0.0.0/24这个网段<br><code>nmap -sP 10.0.0.0/24</code><br><br>使用SYN的方法对全端口进行扫描,在aggressive(4)的时间模板下,同时对开放的端口进行端口识别<br><code>nmap -p1-65535 -sV -sS -T4 target</code> <br></p>
+<h5 id="PS-T代表的是扫描的时候-一些控制选项-TCP的延迟时间-探测报文之间的间隔等-的集合-具体的man-nmap一下就知道了"><a href="#PS-T代表的是扫描的时候-一些控制选项-TCP的延迟时间-探测报文之间的间隔等-的集合-具体的man-nmap一下就知道了" class="headerlink" title="PS: -T代表的是扫描的时候,一些控制选项(TCP的延迟时间,探测报文之间的间隔等)的集合,具体的man nmap一下就知道了"></a>PS: -T代表的是扫描的时候,一些控制选项(TCP的延迟时间,探测报文之间的间隔等)的集合,具体的man nmap一下就知道了</h5><p>使用SYN扫描,在aggressive(4)的时间模板下,探测操作系统的类型和版本,还有显示traceroute的结果,结果输出较为详细<br><code>nmap -v -sS -A -T4 target</code><br><br>使用SYN扫描,在insane(5)的时间模板下,探测操作系统的类型和版本,还有显示traceroute的结果,结果输出较为详细<br><code>nmap -v -sS -A -T5 target</code><br><br>使用SYN扫描,在insane(5)的时间模板下,探测操作系统的类型,还有显示traceroute的结果,操作系统的类型,结果输出较为详细<br><code>nmap -v -sV -O -sS -T5 target</code> <br><br>使用SYN的方法对全端口进行扫描,同时对开放的端口进行端口识别,在aggressive(4)的时间模板下,探测操作系统的类型还有显示traceroute的结果,结果输出较为详细<br><code>nmap -v -p 1-65535 -sV -O -sS -T4 target</code><br><br>用SYN的方法对全端口进行扫描,同时对开放的端口进行端口识别,在insane(5)的时间模板下,探测操作系统的类型,还有显示traceroute的结果,结果输出较为详细<br><code>nmap -v -p 1-65535 -sV -O -sS -T5 target</code><br><br>从文件中读取需要扫描的IP列表<br><code>nmap -iL ip-address.txt</code><br><br>Nmap输出格式<br><br>扫描的结果输出到屏幕,同时会存储一份到grep-output.txt<br><code>nmap -sV -p 139,445 -oG grep-output.txt 10.0.1.0/24</code> <br><br>扫描结果输出为html<br><code>nmap -sS -sV -T5 10.0.1.99 --webxml -oX - | xsltproc --output file.html</code><br><br>Nmap扫描Netbios<br>在子网中发现开放netbios的IP<br><code>nmap -sV -v -p139,445 10.0.0.1/24</code><br><br>扫描指定netbios的名称<br><code>nmap -sU --script nbstat.nse -p 137 target</code><br><br>扫描指定的目标,同时检测相关漏洞<br><code>nmap --script-args=unsafe=1 --script smb-check-vulns.nse -p 445 target</code><br><br>将nmap的80端口的扫描结果,通过管道交给nikto进行扫描<br><code>Nmap Nikto Scan nmap -p80 10.0.1.0/24 -oG - | nikto.pl -h -</code><br><br>将nmap的80,443端口的扫描结果,通过管道交给nikto进行扫描<br><code>nmap -p80,443 10.0.1.0/24 -oG - | nikto.pl -h -</code><br></p>
+<h3 id="3-Nmap参数详解"><a href="#3-Nmap参数详解" class="headerlink" title="3:Nmap参数详解"></a>3:Nmap参数详解</h3><hr>
+<h4 id="Nmap支持主机名-ip-网段的表示方式"><a href="#Nmap支持主机名-ip-网段的表示方式" class="headerlink" title="Nmap支持主机名,ip,网段的表示方式"></a>Nmap支持主机名,ip,网段的表示方式</h4><h4 id="例如-blah-highon-coffee-namp-org-24-192-168-0-1-10-0-0-25-1-254"><a href="#例如-blah-highon-coffee-namp-org-24-192-168-0-1-10-0-0-25-1-254" class="headerlink" title="例如:blah.highon.coffee, namp.org/24, 192.168.0.1;10.0.0-25.1-254"></a>例如:blah.highon.coffee, namp.org/24, 192.168.0.1;10.0.0-25.1-254</h4><p><code>-iL filename</code>                    从文件中读取待检测的目标,文件中的表示方法支持机名,ip,网段<br><br><code>-iR hostnum</code>                     随机选取,进行扫描.如果-iR指定为0,则是无休止的扫描<br><br><code>--exclude host1[, host2]</code>        从扫描任务中需要排除的主机<br>           </p>
+<hr>
+<h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><p><code>-sL</code>                     仅仅是显示,扫描的IP数目,不会进行任何扫描<br><br><code>-sn</code>                     ping扫描,即主机发现<br><br><code>-Pn</code>                     不检测主机存活<br><br><code>-PS/PA/PU/PY[portlist]</code>  TCP SYN Ping/TCP ACK Ping/UDP Ping发现<br><br><code>-PE/PP/PM</code>               使用ICMP echo, timestamp and <br><br><code>netmask</code> 请求包发现主机<br><br><code>-PO[prococol list]</code>      使用IP协议包探测对方主机是否开启 <br><br><code>-n/-R</code>                   不对IP进行域名反向解析/为所有的IP都进行域名的反响解析<br></p>
+<h3 id="扫描技巧"><a href="#扫描技巧" class="headerlink" title="扫描技巧"></a>扫描技巧</h3><p><code>-sS/sT/sA/sW/sM</code>                 TCP SYN/TCP connect()/ACK/TCP窗口扫描/TCP Maimon扫描<br><br><code>-sU</code>                             UDP扫描<br><br><code>-sN/sF/sX</code>                       TCP Null，FIN，and Xmas扫描<br><br><code>--scanflags</code>                     自定义TCP包中的flags<br><br><code>-sI zombie host[:probeport]</code>     Idlescan<br><br><code>-sY/sZ</code>                          SCTP INIT/COOKIE-ECHO 扫描<br><br><code>-sO</code>                             使用IP protocol 扫描确定目标机支持的协议类型<br><br><code>-b “FTP relay host”</code>             使用FTP bounce scan<br>指定端口和扫描顺序<br></p>
+<p><code>-p</code>                      特定的端口 -p80,443 或者 -p1-65535<br><br><code>-p U:PORT</code>               扫描udp的某个端口, -p U:53<br><br><code>-F</code>                      快速扫描模式,比默认的扫描端口还少<br><br><code>-r</code>                      不随机扫描端口,默认是随机扫描的<br><br><code>--top-ports &quot;number&quot;</code>    扫描开放概率最高的number个端口,出现的概率需要参考nmap-services文件,ubuntu中该文件位于/usr/share/nmap.nmap默认扫前1000个<br><br><code>--port-ratio &quot;ratio&quot;</code>    扫描指定频率以上的端口<br>服务版本识别<br></p>
+<p><code>-sV</code>                             开放版本探测,可以直接使用-A同时打开操作系统探测和版本探测<br><br><code>--version-intensity &quot;level&quot;</code>     设置版本扫描强度,强度水平说明了应该使用哪些探测报文。数值越高，服务越有可能被正确识别。默认是7<br><br><code>--version-light</code>                 打开轻量级模式,为–version-intensity 2的别名<br><br><code>--version-all</code>                   尝试所有探测,为–version-intensity 9的别名<br><br><code>--version-trace</code>                 显示出详细的版本侦测过程信息</p>
+<h4 id="脚本扫描"><a href="#脚本扫描" class="headerlink" title="脚本扫描"></a>脚本扫描</h4><p><code>-sC</code>                             根据端口识别的服务,调用默认脚本<br><br><code>--script=”Lua scripts”</code>          调用的脚本名<br><br><code>--script-args=n1=v1,[n2=v2]</code>     调用的脚本传递的参数<br><br><code>--script-args-file=filename</code>     使用文本传递参数<br><br><code>--script-trace</code>                  显示所有发送和接收到的数据<br><br><code>--script-updatedb</code>               更新脚本的数据库<br><br><code>--script-help=”Lua script”</code>      显示指定脚本的帮助</p>
+<h3 id="OS识别"><a href="#OS识别" class="headerlink" title="OS识别"></a>OS识别</h3><hr>
+<p><code>-O</code>              启用操作系统检测,-A来同时启用操作系统检测和版本检测<br><br><code>--osscan-limit</code>  针对指定的目标进行操作系统检测(至少需确知该主机分别有一个open和closed的端口)<br><br><code>--osscan-guess</code>  推测操作系统检测结果,当Nmap无法确定所检测的操作系统时，会尽可能地提供最相近的匹配，Nmap默认进行这种匹配<br>防火墙/IDS躲避和哄骗<br><br><code>-f; --mtu value</code>                 指定使用分片、指定数据包的MTU.<br><br><code>-D decoy1,decoy2,ME</code>             使用诱饵隐蔽扫描<br><br><code>-S IP-ADDRESS</code>                   源地址欺骗<br><br><code>-e interface</code>                    使用指定的接口<br><br><code>-g/ --source-port PROTNUM</code>       使用指定源端口<br><br><code>--proxies url1,[url2],...</code>       使用HTTP或者SOCKS4的代理<br> </p>
+<p><code>--data-length NUM</code>               填充随机数据让数据包长度达到NUM<br><br><code>--ip-options OPTIONS</code>            使用指定的IP选项来发送数据包<br><br><code>--ttl VALUE</code>                     设置IP time-to-live域<br><br><code>--spoof-mac ADDR/PREFIX/VEBDOR</code>  MAC地址伪装<br><br><code>--badsum</code>                        使用错误的checksum来发送数据包</p>
+<h3 id="Nmap-输出"><a href="#Nmap-输出" class="headerlink" title="Nmap 输出"></a>Nmap 输出</h3><hr>
+<p><code>-oN</code>                     将标准输出直接写入指定的文件<br><br><code>-oX</code>                     输出xml文件<br><br><code>-oS</code>                     将所有的输出都改为大写<br><br><code>-oG</code>                     输出便于通过bash或者perl处理的格式,非xml<br><br><code>-oA BASENAME</code>            可将扫描结果以标准格式、XML格式和Grep格式一次性输出<br><br><code>-v</code>                      提高输出信息的详细度<br><br><code>-d level</code>                设置debug级别,最高是9<br><br><code>--reason</code>                显示端口处于带确认状态的原因<br><br><code>--open</code>                  只输出端口状态为open的端口<br><br><code>--packet-trace</code>          显示所有发送或者接收到的数据包<br><br><code>--iflist</code>                显示路由信息和接口,便于调试<br><br><code>--log-errors</code>            把日志等级为errors/warings的日志输出<br><br><code>--append-output</code>         追加到指定的文件<br><br><code>--resume FILENAME</code>       恢复已停止的扫描<br><br><code>--stylesheet PATH/URL</code>   设置XSL样式表，转换XML输出<br><br><code>--webxml</code>                从namp.org得到XML的样式<br><br><code>--no-sytlesheet</code>         忽略XML声明的XSL样式表<br>其他nmap选项<br><br><code>-6</code>                      开启IPv6<br><br><code>-A</code>                      OS识别,版本探测,脚本扫描和traceroute<br><br><code>--datedir DIRNAME</code>       说明用户Nmap数据文件位置<br><br><code>--send-eth / --send-ip</code>  使用原以太网帧发送/在原IP层发送<br><br><code>--privileged</code>            假定用户具有全部权限<br><br><code>--unprovoleged</code>          假定用户不具有全部权限,创建原始套接字需要root权限<br><br><code>-V</code>                      打印版本信息<br><br><code>-h</code>                      输出帮助</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nmap手册/" rel="tag"># nmap手册</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/16/sqlmap用法大全/" rel="next" title="sqlmap用法大全">
+                <i class="fa fa-chevron-left"></i> sqlmap用法大全
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/23/DC-6靶机/" rel="prev" title="DC-6靶机">
+                DC-6靶机 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/hackertx.jpg" alt="Line">
+            
+              <p class="site-author-name" itemprop="name">Line</p>
+              <div class="site-description motion-element" itemprop="description">世界上每一个瞬间都是奇迹</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/1525224844" title="GitHub &rarr; https://github.com/1525224844" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-nmap功能介绍"><span class="nav-number">1.</span> <span class="nav-text">1:nmap功能介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-简单示例"><span class="nav-number">2.</span> <span class="nav-text">2:简单示例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#PS-T代表的是扫描的时候-一些控制选项-TCP的延迟时间-探测报文之间的间隔等-的集合-具体的man-nmap一下就知道了"><span class="nav-number">2.0.1.</span> <span class="nav-text">PS: -T代表的是扫描的时候,一些控制选项(TCP的延迟时间,探测报文之间的间隔等)的集合,具体的man nmap一下就知道了</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Nmap参数详解"><span class="nav-number">3.</span> <span class="nav-text">3:Nmap参数详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nmap支持主机名-ip-网段的表示方式"><span class="nav-number">3.1.</span> <span class="nav-text">Nmap支持主机名,ip,网段的表示方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例如-blah-highon-coffee-namp-org-24-192-168-0-1-10-0-0-25-1-254"><span class="nav-number">3.2.</span> <span class="nav-text">例如:blah.highon.coffee, namp.org/24, 192.168.0.1;10.0.0-25.1-254</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主机发现"><span class="nav-number">4.</span> <span class="nav-text">主机发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扫描技巧"><span class="nav-number">5.</span> <span class="nav-text">扫描技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#脚本扫描"><span class="nav-number">5.1.</span> <span class="nav-text">脚本扫描</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OS识别"><span class="nav-number">6.</span> <span class="nav-text">OS识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nmap-输出"><span class="nav-number">7.</span> <span class="nav-text">Nmap 输出</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Line</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
