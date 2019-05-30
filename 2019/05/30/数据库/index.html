@@ -120,7 +120,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cjb.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cattables.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/deltables.png">
-<meta property="og:updated_time" content="2019-05-30T12:07:29.525Z">
+<meta property="og:updated_time" content="2019-05-30T13:05:39.095Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库">
 <meta name="twitter:description" content="数据库简介 什么是数据库： 数据库就是将大量数据保存起来，通过计算机加工而成的可以高效访问的数据集合数据库是长期储存在计算机内，有组织的，可共享的数据集合。     常见的数据库： Oracle Database:甲骨文公司 SQL Server: 微软公司 DB2: IBM公司 PostgreSQL: 开源 MySQL:开源  数据库结构 服务器：用于接收并处理其他程序发出的请求的程序（软件），">
@@ -350,7 +350,7 @@
                 
               
 
-              <time title="创建时间：2019-05-30 16:44:21 / 修改时间：20:07:29" itemprop="dateCreated datePublished" datetime="2019-05-30T16:44:21+08:00">2019-05-30</time>
+              <time title="创建时间：2019-05-30 16:44:21 / 修改时间：21:05:39" itemprop="dateCreated datePublished" datetime="2019-05-30T16:44:21+08:00">2019-05-30</time>
             
 
             
@@ -423,8 +423,17 @@
 <li>查看 MySQL 运行状态 <code>systemctl status mysqld</code><h3 id="Windows安装MySQL"><a href="#Windows安装MySQL" class="headerlink" title="Windows安装MySQL"></a>Windows安装MySQL</h3></li>
 <li>windows 上安装MySQL直接下载安装包安装就可以</li>
 <li><a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">下载地址</a><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/windowsdz.png" alt></li>
-<li>也可以不安装MySQL，安装一个PHPstudy，里面自带MySQL<h1 id="MySQL的简单语法"><a href="#MySQL的简单语法" class="headerlink" title="MySQL的简单语法"></a>MySQL的简单语法</h1><h4 id="登录MySQL"><a href="#登录MySQL" class="headerlink" title="登录MySQL"></a>登录MySQL</h4><code>mysql -u 主机名 -p</code> <br><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/login.png" alt><h4 id="列出MySQL数据库中所有数据库列表"><a href="#列出MySQL数据库中所有数据库列表" class="headerlink" title="列出MySQL数据库中所有数据库列表"></a>列出MySQL数据库中所有数据库列表</h4><code>show databases;</code><br><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/databases.png" alt><h4 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h4><code>create database db_name(database name) charset=utf8;</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cjsjk.png" alt><h4 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h4><code>use db_name;</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/xzsjk.png" alt><h4 id="创建数据表"><a href="#创建数据表" class="headerlink" title="创建数据表"></a>创建数据表</h4><code>create table h1ck(username varchar(255) not null PRIMARY KEY) charset=utf8;</code> 并且再表里加上username<br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cjb.png" alt><h4 id="查看表的详细内容"><a href="#查看表的详细内容" class="headerlink" title="查看表的详细内容"></a>查看表的详细内容</h4><code>desc table_name</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cattables.png" alt><h4 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h4><code>drop table h1ck;</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/deltables.png" alt><h4 id="表里添加字段："><a href="#表里添加字段：" class="headerlink" title="表里添加字段："></a>表里添加字段：</h4><code>alter table table_name add password varchar(255);</code><h4 id="表里删除字段："><a href="#表里删除字段：" class="headerlink" title="表里删除字段："></a>表里删除字段：</h4><code>alter table table_name drop column password</code></li>
+<li>也可以不安装MySQL，安装一个PHPstudy，里面自带MySQL<br></li>
 </ul>
+<h1 id="MySQL的简单语法"><a href="#MySQL的简单语法" class="headerlink" title="MySQL的简单语法"></a>MySQL的简单语法</h1><h4 id="登录MySQL"><a href="#登录MySQL" class="headerlink" title="登录MySQL"></a>登录MySQL</h4><p> <code>mysql -u 主机名 -p</code> <br><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/login.png" alt></p>
+<h4 id="列出MySQL数据库中所有数据库列表"><a href="#列出MySQL数据库中所有数据库列表" class="headerlink" title="列出MySQL数据库中所有数据库列表"></a>列出MySQL数据库中所有数据库列表</h4><p> <code>show databases;</code><br><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/databases.png" alt></p>
+<h4 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h4><p> <code>create database db_name(database name) charset=utf8;</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cjsjk.png" alt></p>
+<h4 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h4><p> <code>use db_name;</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/xzsjk.png" alt></p>
+<h4 id="创建数据表"><a href="#创建数据表" class="headerlink" title="创建数据表"></a>创建数据表</h4><p> <code>create table h1ck(username varchar(255) not null PRIMARY KEY) charset=utf8;</code> 并且再表里加上username<br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cjb.png" alt></p>
+<h4 id="查看表的详细内容"><a href="#查看表的详细内容" class="headerlink" title="查看表的详细内容"></a>查看表的详细内容</h4><p> <code>desc table_name</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/cattables.png" alt></p>
+<h4 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h4><p> <code>drop table h1ck;</code><br><img src="https://raw.githubusercontent.com/1525224844/1525224844.github.io/master/images/mysql/deltables.png" alt></p>
+<h4 id="表里添加字段："><a href="#表里添加字段：" class="headerlink" title="表里添加字段："></a>表里添加字段：</h4><p><code>alter table table_name add password varchar(255);</code></p>
+<h4 id="表里删除字段："><a href="#表里删除字段：" class="headerlink" title="表里删除字段："></a>表里删除字段：</h4><p><code>alter table table_name drop column password</code></p>
 <h4 id="往字段添加值："><a href="#往字段添加值：" class="headerlink" title="往字段添加值："></a>往字段添加值：</h4><p><code>insert into table_name values (&#39;admin&#39;,&#39;123456&#39;);</code></p>
 <h4 id="读取数据表："><a href="#读取数据表：" class="headerlink" title="读取数据表："></a>读取数据表：</h4><p><code>select *from table_name;</code></p>
 <h4 id="查询字段的内容："><a href="#查询字段的内容：" class="headerlink" title="查询字段的内容："></a>查询字段的内容：</h4><p><code>select column_name from table_name;</code><br><br><code>select column_name,column_name for table_name</code></p>
